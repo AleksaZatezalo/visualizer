@@ -35,8 +35,28 @@ int main()
     SDL_SetRenderDrawColor(renderer, 0x00,0xFF,0x00,100);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
-    SDL_Delay(2000);
-    
+
+    SDL_Event event;
+    bool quit = false;
+    while(!quit){
+        while(SDL_PollEvent(&event)){
+            switch(event.type){
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+                case SDL_KEYUP:
+                    break;
+                case SDL_KEYDOWN:
+                    switch(event.key.keysym.sym){
+                        case SDLK_ESCAPE:
+                            quit = true;
+                            break;
+                    }
+                    break;
+            }
+        }
+    }
+
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     SDL_Quit();
