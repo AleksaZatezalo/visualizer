@@ -4,6 +4,45 @@
 #define WINDOW_WIDTH    1770
 #define WINDOW_HEIGHT 1410
 
+#define NETWORK_WIDTH 1600
+#define NETWORK_HEIGHT 1300
+
+void SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int radius, SDL_Color c)
+{
+    SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
+    for(int w = 0; w < radius * 2; w++) {
+        for(int h = 0; h < radius * 2; h++){
+            int dx = radius - w;
+            int dy = radius - h;
+            if((dx*dx + dy*dy) <= (radius * radius)) {
+                SDL_RenderDrawPoint(renderer, x+dx, y+dy);
+            }
+        }
+    }
+}
+
+void render_network(SDL_Renderer *renderer, int x, int y)
+{
+    SDL_SetRenderDrawColor(renderer, 0x00, 0x55, 0x55, 255);
+    SDL_Rect box;
+    box.w = NETWORK_WIDTH;
+    box.h = NETWORK_HEIGHT;
+    box.x = x;
+    box.y = y;
+
+    SDL_RenderDrawRect(renderer, &box);
+
+    SDL_Color c;
+    c.r = 0xFF;
+    c.g = 0x00;
+    c.b = 0x00;
+    c.a = 0x00;
+
+    SDL_RenderFillCircle(renderer, x + 200, y + 200, 150, c);
+
+    return;
+}
+
 int main()
 {
     SDL_Window *window;
@@ -32,9 +71,8 @@ int main()
         fprintf(stderr, "ERROR: !renderer");
     }
 
-    SDL_SetRenderDrawColor(renderer, 0x00,0xFF,0x00,100);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    int net_x = (WINDOW_WIDTH/2) - (NETWORK_WIDTH/2);
+    int net_y = (WINDOW_HEIGHT/2) - (NETWORK_HEIGHT/2);
 
     SDL_Event event;
     bool quit = false;
@@ -55,6 +93,14 @@ int main()
                     break;
             }
         }
+        SDL_RenderClear(renderer);
+        //START RENDER LOOP
+
+        render_network(renderer, net_x, net_y);
+
+        //END RENDER LOOP
+        SDL_SetRenderDrawColor(renderer, 0x11,0x11,0x11,100);
+        SDL_RenderPresent(renderer);
     }
 
     SDL_DestroyRenderer(renderer);
