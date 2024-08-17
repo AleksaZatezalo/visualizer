@@ -7,6 +7,11 @@
 #define NETWORK_WIDTH 1600
 #define NETWORK_HEIGHT 1300
 
+#define ARRAY_LEN(x) (sizeof(x) / sizeof(x[0]))
+
+int arch[] = {2, 2, 1};
+
+
 void SDL_RenderFillCircle(SDL_Renderer *renderer, int x, int y, int radius, SDL_Color c)
 {
     SDL_SetRenderDrawColor(renderer, c.r, c.g, c.b, c.a);
@@ -38,7 +43,15 @@ void render_network(SDL_Renderer *renderer, int x, int y)
     c.b = 0x00;
     c.a = 0x00;
 
-    SDL_RenderFillCircle(renderer, x + 200, y + 200, 150, c);
+    int layers = ARRAY_LEN(arch);
+    int layer_width = NETWORK_WIDTH / layers;
+    int x_offset = layer_width / 2;
+
+    for (int i = 0; i < layers; i++){
+        int xPos = x + i * layer_width + x_offset;
+        SDL_RenderFillCircle(renderer, xPos, y + 200, 150, c);
+
+    }
 
     return;
 }
