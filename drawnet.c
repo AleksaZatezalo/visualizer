@@ -38,8 +38,8 @@ void render_network(SDL_Renderer *renderer, int x, int y)
     SDL_RenderDrawRect(renderer, &box);
 
     SDL_Color c;
-    c.r = 0xFF;
-    c.g = 0x00;
+    c.r = 0x00;
+    c.g = 0xff;
     c.b = 0x00;
     c.a = 0x00;
 
@@ -49,8 +49,25 @@ void render_network(SDL_Renderer *renderer, int x, int y)
 
     for (int i = 0; i < layers; i++){
         int xPos = x + i * layer_width + x_offset;
-        SDL_RenderFillCircle(renderer, xPos, y + 200, 150, c);
+        for(int j = 0; j < arch[i]; j++) {
+            int neuron_height = NETWORK_HEIGHT / arch[i];
+            int y_offset = neuron_height / 2;
+            int yPos = y + j * neuron_height + y_offset;
 
+            if(i < layers){
+                for(int k = 0; k < arch[i+i]; k++){
+                    int xPos2 = x + (i+1) * layer_width + x_offset;        
+                    int neuron_height2 = NETWORK_HEIGHT / arch[i+1];
+                    int y_offset2 = neuron_height2 / 2;
+                    int yPos2 = y + k * neuron_height2 + y_offset2;
+
+                    SDL_SetRenderDrawColor(renderer, 0x55, 0x55, 0x55, 255);
+                    SDL_RenderDrawLine(renderer, xPos, yPos, xPos2, yPos2);
+                }
+            }
+
+            SDL_RenderFillCircle(renderer, xPos, yPos, 80, c);
+        }
     }
 
     return;
